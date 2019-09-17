@@ -1,5 +1,6 @@
 import requests
 
+from datapoint_client import logger
 from datapoint_client.errors import SiteError
 from datapoint_client.formatter import ObsFormatter, WeatherFormatter
 
@@ -20,6 +21,7 @@ class DatapointClient:
         self.wx_formatter = wxformatter()
 
     def get_obs_for_site(self, site):
+        logger.info(f"Getting observations for site id: {site}")
         url, payload = self.build_url_and_payload("hourly", "wxobs", site)
         obs_json = self.make_request(url, payload)
         validate_site(obs_json)
@@ -27,6 +29,7 @@ class DatapointClient:
         return self.format_data(obs_json, self.obs_formatter)
 
     def get_3hourly_forecasts_for_site(self, site):
+        logger.info(f"Getting forecast for site id: {site}")
         url, payload = self.build_url_and_payload("3hourly", "wxfcs", site)
         forecast_json = self.make_request(url, payload)
         validate_site(forecast_json)
